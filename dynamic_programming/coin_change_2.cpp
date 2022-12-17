@@ -1,7 +1,7 @@
 #include<iostream>
 #include<queue>
 #include<unordered_set>
-#include<sstream>
+#include<string>
 
 using namespace std;
 
@@ -10,17 +10,17 @@ public:
 
     struct Amt {
         long long amt;
-        long long cs;
+        string cs;
     };
 
     int change(int amount, vector<int>& coins) {
         int count = 0;
         queue<Amt*>q;
-        unordered_set<long long>visited;
+        unordered_set<string>visited;
         
-        struct Amt *init = (struct Amt*)malloc(sizeof(struct Amt));
+        struct Amt *init = new Amt();
         init->amt = 0;
-        init->cs = 0;
+        init->cs = "0";
 
         int min = amount;
         for(int i=0; i<coins.size(); i++) {
@@ -42,23 +42,36 @@ public:
             if(curr_amt->amt == amount) {
                 if(visited.find(curr_amt->cs) == visited.end()) {
                     count++;
+                    //cout<<curr_amt->cs<<"\n";
                     visited.insert(curr_amt->cs);
                 }
                 continue;
             }
+            
             if(visited.find(curr_amt->cs) == visited.end()) {
                 for(int coin : coins) {
-                    struct Amt *newnode = (struct Amt*)malloc(sizeof(struct Amt));
-                    string x = to_string(curr_amt->cs) + to_string(coin);
-                    sort(x.begin(), x.end());
-                    stringstream ss(x);
-                    ss>>newnode->cs;
+                    
+                    int t = (int)((curr_amt->cs).back() - 48);
+                    if(t>coin) continue;
+
+                    struct Amt *newnode = new Amt();
+                    string x = curr_amt->cs + to_string(coin);
+                    
+                    newnode->cs = x;
                     newnode->amt = curr_amt->amt + coin;
                     q.push(newnode);
                 }
                 visited.insert(curr_amt->cs);
             }
+        
         }
+
         return count;
     }
 };
+
+int main() {
+    Solution s = Solution();
+    vector<int>coins={1,2,5};
+    cout<<s.change(500, coins);
+}
