@@ -43,13 +43,30 @@ int altCutModified(vector<int>& rod, int n, int c) {
     return altCutModified(rod, n-1, c);
 }
 
+int cutRodDP(vector<int>& rod, int n, int c) {
+    vector<int>t(c+1, 0);
+    vector<vector<int>>dp(n+1, t);
+    for(int i=1; i<=n; i++) {
+        for(int j=1; j<=c; j++) {
+            if(j-i >= 0) {
+                dp[i][j] = max(rod[i-1]+dp[i][j-i], dp[i-1][j]);
+            } else {
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    return dp[n][c];
+}
+
 int main() {
     vector<int> p = {3, 5, 8, 9, 10, 35, 17, 20, 24, 30};
     unordered_map<int, int>hmap;
     int x = cutRod(p, 10, hmap);
     int y = altCut(p, 9, 10);
     int z = altCutModified(p, 9, 10);
+    int dp = cutRodDP(p, 10, 10);
     cout<<x<<"\n";
     cout<<y<<"\n";
-    cout<<z;
+    cout<<z<<"\n";
+    cout<<dp;
 }
