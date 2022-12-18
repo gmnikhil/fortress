@@ -50,14 +50,11 @@ public:
             
             if(visited.find(curr_amt->cs) == visited.end()) {
                 for(int coin : coins) {
-                    
                     int t = (int)((curr_amt->cs).back() - 48);
                     if(t>coin) continue;
 
                     struct Amt *newnode = new Amt();
-                    string x = curr_amt->cs + to_string(coin);
-                    
-                    newnode->cs = x;
+                    newnode->cs = curr_amt->cs + to_string(coin);
                     newnode->amt = curr_amt->amt + coin;
                     q.push(newnode);
                 }
