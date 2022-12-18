@@ -15,11 +15,7 @@ int knapsack(vector<int>v, vector<int>w, int c, int n) {
 int knapsackDP(vector<int>v, vector<int>w, int n, int c) {
     vector<int>t(c+1, 0);
     vector<vector<int>>dp(n+1, t);
-    for(int i=1; i<=n; i++) {
-        if(i-w[i-1] >= 0) {
-            dp[1][i] = v[i-1];
-        }
-    }
+    
     for(int i=1; i<=n; i++) {
         for(int j=1; j<=c; j++) {
             if(j-w[i-1] >= 0) {

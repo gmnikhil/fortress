@@ -32,11 +32,24 @@ int altCut(vector<int>& rod, int n, int c) {
     return altCut(rod, n-1, c);
 }
 
+//so heres the modified version that works!
+int altCutModified(vector<int>& rod, int n, int c) {
+    if(n<0 || c==0) return 0;
+    if(c-(n+1)>=0) {
+        int include = rod[n] + altCutModified(rod, n, c-(n+1));
+        int exclude = altCutModified(rod, n-1, c);
+        return max(include, exclude);
+    } 
+    return altCutModified(rod, n-1, c);
+}
+
 int main() {
     vector<int> p = {3, 5, 8, 9, 10, 35, 17, 20, 24, 30};
     unordered_map<int, int>hmap;
     int x = cutRod(p, 10, hmap);
     int y = altCut(p, 9, 10);
+    int z = altCutModified(p, 9, 10);
     cout<<x<<"\n";
-    cout<<y;
+    cout<<y<<"\n";
+    cout<<z;
 }
