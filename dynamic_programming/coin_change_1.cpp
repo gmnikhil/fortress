@@ -59,4 +59,36 @@ public:
         if(minCoins == 1000000) return -1;
         return minCoins;
     }
+
+    int coinChangeDP(vector<int>& coins, int amount) {
+        if(amount == 0) return 0;
+
+        int n = coins.size();
+        vector<int>t(amount+1, INT_MAX-1);
+        vector<vector<int>>dp(n+1, t);
+        
+        int smallest = INT_MAX;
+        for(int coin:coins) {
+            if(coin<smallest) smallest=coin;
+        }
+        if(smallest>amount) return -1;
+        
+        for(int i=1; i<=n; i++) {
+            for(int j=1; j<=amount; j++) {
+                if(j-coins[i-1] >= 0) {
+                    if(j%coins[i-1] == 0) {
+                        dp[i][j] = min(j/coins[i-1], 1+dp[i][j-coins[i-1]]);
+                        dp[i][j] = min(dp[i][j], dp[i-1][j]);
+                    }
+                    else
+                        dp[i][j] = min(dp[i][j-coins[i-1]]+1, dp[i-1][j]);
+                } else {
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        
+        if(dp[n][amount] == INT_MAX-1) return -1;
+        return dp[n][amount];
+    }
 };
